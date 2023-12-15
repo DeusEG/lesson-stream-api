@@ -4,6 +4,7 @@ import ru.lesson.stream.dto.Employee;
 import ru.lesson.stream.dto.PositionType;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -54,7 +55,11 @@ public class LessonStreamApi {
      * Необходимо устранить дублирование.
      */
     public List<Employee> task4(List<List<Employee>> employeeDepartments) {
-        return null;
+        return employeeDepartments.stream()
+                .flatMap(List::stream)
+                .distinct()
+                .sorted(Comparator.comparingInt(Employee::getRating).reversed())
+                .collect(Collectors.toList());
     }
 
     /**
