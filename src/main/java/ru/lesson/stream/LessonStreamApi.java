@@ -3,11 +3,11 @@ package ru.lesson.stream;
 import ru.lesson.stream.dto.Employee;
 import ru.lesson.stream.dto.PositionType;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+
+import static java.util.Comparator.*;
+import static java.util.stream.Collectors.*;
 
 public class LessonStreamApi {
 
@@ -20,7 +20,7 @@ public class LessonStreamApi {
         return employees.stream()
                 .filter(e -> e.getRating() > 50)
                 .distinct()
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     /**
@@ -33,7 +33,7 @@ public class LessonStreamApi {
         return employees.stream()
                 .filter(e -> e.getRating() < 50)
                 .map(e -> e.getName() + "=" + e.getRating() )
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     /**
@@ -58,8 +58,8 @@ public class LessonStreamApi {
         return employeeDepartments.stream()
                 .flatMap(List::stream)
                 .distinct()
-                .sorted(Comparator.comparingInt(Employee::getRating).reversed())
-                .collect(Collectors.toList());
+                .sorted(comparingInt(Employee::getRating).reversed())
+                .collect(toList());
     }
 
     /**
@@ -81,7 +81,7 @@ public class LessonStreamApi {
         return employees.stream()
                 .skip((long) size * (number - 1))
                 .limit(size)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     /**
@@ -94,7 +94,7 @@ public class LessonStreamApi {
     public String task6(List<Employee> employees) {
         return employees.stream()
                 .map(Employee::getName)
-                .collect(Collectors.joining(", ", "[", "]"));
+                .collect(joining(", ", "[", "]"));
     }
 
     /**
@@ -106,7 +106,7 @@ public class LessonStreamApi {
     public boolean task7(List<Employee> employees) {
         var uniqueName = employees.stream()
                 .map(Employee::getName)
-                .collect(Collectors.toSet());
+                .collect(toSet());
         return uniqueName.size() != employees.size();
     }
 
@@ -117,8 +117,8 @@ public class LessonStreamApi {
      */
     public Map<PositionType, Double> task8(List<Employee> employees) {
         return employees.stream()
-                .collect(Collectors.groupingBy(Employee::getPositionType,
-                        Collectors.averagingDouble(Employee::getRating)));
+                .collect(groupingBy(Employee::getPositionType,
+                        averagingDouble(Employee::getRating)));
     }
 
     /**
@@ -130,7 +130,7 @@ public class LessonStreamApi {
      */
     public Map<Boolean, Long> task9(List<Employee> employees) {
         return employees.stream()
-                .collect(Collectors.partitioningBy(e -> e.getRating() > 50, Collectors.counting()));
+                .collect(partitioningBy(e -> e.getRating() > 50, counting()));
     }
 
     /**
@@ -142,10 +142,10 @@ public class LessonStreamApi {
      */
     public Map<Boolean, String> task10(List<Employee> employees) {
         return employees.stream()
-                .collect(Collectors.partitioningBy(e -> e.getRating() > 50,
-                        Collectors.mapping(
+                .collect(partitioningBy(e -> e.getRating() > 50,
+                        mapping(
                                 Employee::getName,
-                                Collectors.joining(", "))
+                                joining(", "))
                 ));
     }
 }
