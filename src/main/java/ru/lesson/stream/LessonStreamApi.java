@@ -78,7 +78,10 @@ public class LessonStreamApi {
         if (number <= 0) {
             throw new IllegalArgumentException(Integer.toString(number));
         }
-        return null;
+        return employees.stream()
+                .skip((long) size * (number - 1))
+                .limit(size)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -89,7 +92,9 @@ public class LessonStreamApi {
      * Пример результата: [Ivan, Olga, John]
      */
     public String task6(List<Employee> employees) {
-        return null;
+        return employees.stream()
+                .map(Employee::getName)
+                .collect(Collectors.joining(", ", "[", "]"));
     }
 
     /**
@@ -99,7 +104,10 @@ public class LessonStreamApi {
      * Если дубли существуют - вернуть true, если дублей нет - вернуть false
      */
     public boolean task7(List<Employee> employees) {
-        return false;
+        var uniqueName = employees.stream()
+                .map(Employee::getName)
+                .collect(Collectors.toSet());
+        return uniqueName.size() != employees.size();
     }
 
     /**
@@ -108,7 +116,9 @@ public class LessonStreamApi {
      * должности сотрудника {@link Employee#getPositionType()}
      */
     public Map<PositionType, Double> task8(List<Employee> employees) {
-        return null;
+        return employees.stream()
+                .collect(Collectors.groupingBy(Employee::getPositionType,
+                        Collectors.averagingDouble(Employee::getRating)));
     }
 
     /**
@@ -119,7 +129,8 @@ public class LessonStreamApi {
      * Сотрудник является эффективным, если его рейтинг больше 50.
      */
     public Map<Boolean, Long> task9(List<Employee> employees) {
-        return null;
+        return employees.stream()
+                .collect(Collectors.partitioningBy(e -> e.getRating() > 50, Collectors.counting()));
     }
 
     /**
@@ -130,7 +141,11 @@ public class LessonStreamApi {
      * Сотрудник является эффективным, если его рейтинг больше 50.
      */
     public Map<Boolean, String> task10(List<Employee> employees) {
-        return null;
+        return employees.stream()
+                .collect(Collectors.partitioningBy(e -> e.getRating() > 50,
+                        Collectors.mapping(
+                                Employee::getName,
+                                Collectors.joining(", "))
+                ));
     }
-
 }
